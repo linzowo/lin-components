@@ -4,8 +4,11 @@
     :class="{ running: running }"
     :style="{ width: width, height: height }"
   >
-    <div class="time front" :data-number="time"></div>
-    <div class="time back" :data-number="Number(time) + 1"></div>
+    <div class="time front" :data-number="time >= 9 ? 9 : time"></div>
+    <div
+      class="time back"
+      :data-number="time >= 9 ? 0 : time + 1"
+    ></div>
   </div>
 </template>
 
