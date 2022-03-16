@@ -58,7 +58,8 @@ function initWaveAnimate2(scene: any) {
     let radius = 10 // 米
     radius = radius / map.getResolution(map.getCenter(), 20)
     const unit = 1
-    const range = 360
+    // 不加1会有一个缺口
+    const range = 360 + 1
     const count = range / unit
 
     console.log(geometry)
@@ -72,19 +73,20 @@ function initWaveAnimate2(scene: any) {
       const p2x = Math.cos(angle2) * radius
       const p2y = Math.sin(angle2) * radius
 
+      // 构建顶点
       geometry.vertices.push(0, 0, 0)
       geometry.vertices.push(p1x, p1y, 0)
       geometry.vertices.push(p2x, p2y, 0)
 
-      geometry.vertexColors.push(0.5, 0.1, 0, 0.1)
-      geometry.vertexColors.push(0.5, 0.1, 0, 0.3)
-      geometry.vertexColors.push(0.5, 0.1, 0, 0.6)
+      // 根据顶点确定面
+      geometry.faces.push(i + 2, i + 1, i + 4)
+      geometry.faces.push(i + 362, i + 361, i + 364)
+      geometry.faces.push(i + 722, i + 721, i + 724)
 
-      /* const opacityStart = getOpacity(i / count)
-        const opacityEnd = getOpacity((i + 1) / count)
-        geometry.vertexColors.push(0, 1, 0.2, opacityStart)
-        geometry.vertexColors.push(0, 1, 0.2, opacityStart)
-        geometry.vertexColors.push(0, 1, 0.2, opacityEnd) */
+      // 为面填充纹理颜色
+      geometry.vertexColors.push(0.01, 1, 0.73, 0)
+      geometry.vertexColors.push(0.01, 1, 0.73, 0.06)
+      geometry.vertexColors.push(0.01, 1, 0.73, 0.09)
     }
 
     radar.position(map.getCenter())
@@ -101,16 +103,16 @@ function initWaveAnimate2(scene: any) {
   function scan() {
     // radar.rotateZ(-2)
     /*
-      rotateX: ƒ (a)
-      rotateY: ƒ (a)
-      rotateZ: ƒ (a)
-      scale: ƒ (a,b,c)
-      setRotate: ƒ (a,b,c,d)
-      setScale: ƒ (a,b,c)
-      */
+    rotateX: ƒ (a)
+    rotateY: ƒ (a)
+    rotateZ: ƒ (a)
+    scale: ƒ (a,b,c)
+    setRotate: ƒ (a,b,c,d)
+    setScale: ƒ (a,b,c)
+    */
     radar.setScale(scaleValue, scaleValue, scaleValue)
-    scaleValue += 1
-    if (scaleValue >= 100) {
+    scaleValue += radarWaveRadius / 1000
+    if (scaleValue >= radarWaveRadius / 10) {
       scaleValue = 1
       // radar.setScale(0.1, 0.1, 0.1)
     }
